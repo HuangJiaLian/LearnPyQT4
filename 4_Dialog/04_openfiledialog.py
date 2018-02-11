@@ -6,7 +6,7 @@
 # File    : 04_openfiledialog.py
 # About   : 
 # 1. 打开文件对话框
-# 2. 
+# 2. 加载中文
 # 3. 
 
 import sys
@@ -28,27 +28,33 @@ class Example(QtGui.QMainWindow):
         self.statusBar()
         self.setFocus()
 
-        openFile = QtGui.QAction(QtGui.QIcon('../icons/document.png'), 'Open', self)
+        # 创建一个打开文件的行为
+        openFile = QtGui.QAction(QtGui.QIcon('../icons/document.png'), u'打开', self)
         openFile.setShortcut('Ctrl+O')
-        openFile.setStatusTip('Open new File')
+        openFile.setStatusTip('打开一个文件')
+        # 当这个行为被触发,显示对话框
         self.connect(openFile, QtCore.SIGNAL('triggered()'), self.showDialog)
 
+        # 创建菜单栏,添加打开文件的行为
         menubar = self.menuBar()
-        fileMenu = menubar.addMenu('&File')
+        fileMenu = menubar.addMenu(u'&文件')
         fileMenu.addAction(openFile)
 
         self.setGeometry(300, 300, 350, 300)
-        self.setWindowTitle('OpenFile')
+        self.setWindowTitle(u'打开文件')
 
     def showDialog(self):
-
-        filename = QtGui.QFileDialog.getOpenFileName(self, 'Open file',
-                    '/home')
+        # 打开文件，设置默认的路径为当前目录
+        filename = QtGui.QFileDialog.getOpenFileName(self, u'打开文件','.')
         fname = open(filename)
         data = fname.read()
+        # 这样就允许可以在文本里面包含中文了
+        data = unicode(data, "utf-8")
+        # 修改编辑框的文本
         self.textEdit.setText(data)
 
-app = QtGui.QApplication(sys.argv)
-ex = Example()
-ex.show()
-app.exec_()
+if __name__ == '__main__':
+    app = QtGui.QApplication(sys.argv)
+    ex = Example()
+    ex.show()
+    app.exec_()
