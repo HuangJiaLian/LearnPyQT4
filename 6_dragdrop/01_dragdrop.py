@@ -51,7 +51,6 @@ class Example(QtGui.QWidget):
 
 
 def main():
-
     app = QtGui.QApplication(sys.argv)
     ex = Example()
     ex.show()
